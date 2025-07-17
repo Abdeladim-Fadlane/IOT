@@ -1,0 +1,29 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "generic/alpine319"
+  
+  config.vm.define "afadlaneS" do |server|
+    server.vm.hostname = "afadlaneS"
+    server.vm.network "private_network", ip: "192.168.56.110"
+    server.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    
+    server.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+      vb.cpus = 1
+      vb.name = "afadlaneS"
+    end
+    server.vm.provision "shell", path: "scripts/server.sh"
+  end
+
+  config.vm.define "afadlaneSW" do |worker|
+    worker.vm.hostname = "afadlaneSW"
+    worker.vm.network "private_network", ip: "192.168.56.111"
+    worker.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    worker.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+      vb.cpus = 1
+      vb.name = "afadlaneSW"
+    end
+    worker.vm.provision "shell", path: "scripts/worker.sh"
+  end
+end
